@@ -1,0 +1,82 @@
+body {
+    font-family: "Rubik", serif;
+    background-color: #0d1117; /* خلفية داكنة */
+    color: #c9d1d9; /* نص رمادي فاتح */
+    margin: 0;
+    padding: 20px;
+    direction: rtl;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: #161b22; /* خلفية البطاقات */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+h1, h2 {
+    text-align: center;
+    color: #58a6ff; /* لون أزرق سماوي */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #21262d; /* خلفية الجدول */
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table th, table td {
+    border: 1px solid #30363d;
+    padding: 10px;
+    text-align: center;
+    color: #c9d1d9;
+}
+
+table th {
+    background: #0d1117; /* خلفية الأعمدة */
+    color: #58a6ff;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: #2e6084; /* زر أخضر حديث */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background 0.3s;
+    font-family: "Rubik", serif;
+}
+
+button:hover {
+    background: #58657d; /* لون عند التمرير */
+}
+
+.hidden {
+    display: none;
+}
+
+#history table {
+    width: 100%;
+    margin-top: 20px;
+    background: #21262d;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#history td.present {
+    color: #2ea043; /* أخضر للحضور */
+}
+
+#history td.absent {
+    color: #f85149; /* أحمر للغياب */
+}
