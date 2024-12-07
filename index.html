@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تسجيل الحضور والغياب</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +12,8 @@
 </head>
 <body>
   <div class="container">
+    <button id="install-button" style="display: none;">اضغط للتثبيت</button>
+
     <h1>تسجيل الحضور والغياب</h1>
     <p>تاريخ اليوم: <span id="date"></span></p>
 
@@ -20,6 +23,7 @@
           <th>الاسم</th>
           <th>الحضور</th>
           <th>الغياب</th>
+          <th>التفاصيل</th>
         </tr>
       </thead>
       <tbody id="student-list"></tbody>
@@ -29,6 +33,7 @@
 
     <button id="toggle-stats-button"> الإحصائيات</button>
     <div id="stats" class="hidden"></div>
+    <hr class="hidden">
     <div id="summary" class="hidden"></div>
 
     <button id="toggle-history-button"> سجل الحضور</button>
