@@ -74,9 +74,136 @@ button:hover {
 }
 
 #history td.present {
-    color: #2ea043; /* أخضر للحضور */
+    color: #2ea043; 
 }
 
 #history td.absent {
-    color: #f85149; /* أحمر للغياب */
+    color: #f85149; 
+}
+
+#student-list input[type="radio"] {
+    transform: scale(1.75); 
+    margin: 5px; 
+    cursor: pointer;
+    accent-color: #ccc; /* اللون الافتراضي */
+}
+
+/* تغيير اللون عند التحديد */
+#student-list input[type="radio"]:checked[value="حضر"] {
+    accent-color: #2ea043; /* أخضر للحضور */
+}
+
+#student-list input[type="radio"]:checked[value="غاب"] {
+    accent-color: #f85149; /* أحمر للغياب */
+}
+
+#stats {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #21262d; /* خلفية داكنة */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* تأثير الظل */
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+#stats h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #58a6ff; /* لون أزرق للعناوين */
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#stats ul {
+    list-style: none;
+    padding: 0;
+}
+
+#stats li {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #161b22; 
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#stats li span {
+    font-weight: bold;
+    color: #2ea043; 
+    flex: 1; 
+    text-align: center; 
+}
+
+#stats li span.absent {
+    color: #f85149; 
+}
+
+#summary {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #21262d;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+}
+
+#summary h2 {
+    text-align: center;
+    color: #58a6ff;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.details-input {
+    width: 100%;             
+    padding: 8px;              
+    font-size: 14px;           
+    border: 1px solid #ccc;    
+    border-radius: 5px;       
+    box-sizing: border-box;  
+    color: #000000;               
+    transition: border-color 0.3s ease; 
+    order: none;
+    background-color: #ffe4c400;
+  }
+  
+  .details-input:focus {
+    border-color: #09128c;     
+    outline: none;             
+    background-color: #ffffff; 
+  }
+  
+  .details-input::placeholder {
+    color: #fffdfd;              
+    font-family: "Rubik", serif;
+  }
+  
+
+@media (max-width: 600px) {
+    .details-input {
+      font-size: 12px;               /* تصغير حجم الخط */
+      padding: 6px;                  /* تقليل المسافة الداخلية */
+      border-radius: 3px;            /* تقليل حواف الخانة */
+    }
+    #history table {
+        width: 100%;
+        margin-top: 20px;
+        font-size: 6px;
+        background: #21262d;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    
+  .details-input::placeholder {
+    color: #fffdfd;              
+    font-family: "Rubik", serif;
+    font-size: 8.5px;
+  }
+    
 }
