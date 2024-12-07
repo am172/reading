@@ -18,62 +18,86 @@ students.forEach((student, index) => {
     <td>${student}</td>
     <td><input type="radio" name="attendance-${index}" value="حضر"></td>
     <td><input type="radio" name="attendance-${index}" value="غاب"></td>
+<td><input type="text" id="details-${index}" class="details-input" placeholder="التفاصيل (مثل عذر)"></td>
+
   `;
   studentList.appendChild(row);
 });
-
 saveButton.addEventListener("click", () => {
+  const history = JSON.parse(localStorage.getItem("attendanceHistory")) || [];
+
+  // تحقق إذا كان هناك سجل بنفس التاريخ
+  const existingRecord = history.find((record) => record.date === today);
+  if (existingRecord) {
+    alert("تم تسجيل الحضور بالفعل لهذا اليوم. لا يمكنك تسجيل غياب مرتين في نفس اليوم.");
+    return; // منع الحفظ
+  }
+
   const attendance = [];
   students.forEach((student, index) => {
     const attendanceValue = document.querySelector(`input[name="attendance-${index}"]:checked`);
+    const detailsValue = document.getElementById(`details-${index}`).value;
     attendance.push({
       name: student,
       status: attendanceValue ? attendanceValue.value : "لم يسجل",
+      details: detailsValue || ""
     });
   });
 
   const record = { date: today, attendance };
-  const history = JSON.parse(localStorage.getItem("attendanceHistory")) || [];
   history.push(record);
   localStorage.setItem("attendanceHistory", JSON.stringify(history));
+
   alert("تم حفظ الحضور بنجاح!");
   loadHistory();
   calculateStats();
+
+  document.querySelectorAll(`input[type="radio"]`).forEach((input) => {
+    input.checked = false;
+  });
+  document.querySelectorAll(`input[type="text"]`).forEach((input) => {
+    input.value = "";
+  });
 });
+
+
 
 function loadHistory() {
   const history = JSON.parse(localStorage.getItem("attendanceHistory")) || [];
   historyElement.innerHTML = `
-    <table>
+    <table class="custom-history-table">
       <thead>
         <tr>
           <th>التاريخ</th>
-          <th>الاسم</th>
-          <th>الحالة</th>
+          ${students.map((student) => `<th>${student}</th>`).join("")}
         </tr>
       </thead>
       <tbody>
         ${history
-      .map((record) =>
-        record.attendance
-          .map(
-            (item) => `
+      .map(
+        (record) => `
           <tr>
             <td>${record.date}</td>
-            <td>${item.name}</td>
-            <td class="${item.status === "حضر" ? "present" : "absent"}">
-              ${item.status === "حضر" ? "✅" : "❌"}
-            </td>
+            ${record.attendance
+            .map(
+              (item) => `
+              <td class="${item.status === "حضر" ? "present" : "absent"}">
+                ${item.status === "حضر" ? "✅" : "❌"}
+                ${item.details ? `<div class="details">${item.details}</div>` : ""}
+              </td>
+            `
+            )
+            .join("")}
           </tr>
         `
-          )
-          .join("")
       )
       .join("")}
       </tbody>
     </table>
   `;
 }
+
+
 
 function calculateStats() {
   const history = JSON.parse(localStorage.getItem("attendanceHistory")) || [];
@@ -88,16 +112,19 @@ function calculateStats() {
   });
 
   statsElement.innerHTML = `
-    <h2>الإحصائيات</h2>
-    <ul>
+  <h2>الإحصائيات</h2>
+  <ul>
       ${Object.entries(stats)
       .map(
         ([name, data]) =>
-          `<li>${name}: ${((data.present / data.total) * 100).toFixed(2)}% حضور (${data.present}/${data.total})</li>`
+          `<li>  ${name} 
+            <span>${((data.present / data.total) * 100).toFixed(2)}%</span> 
+            حضور (${data.present}/${data.total})</li>`
       )
       .join("")}
-    </ul>
-  `;
+  </ul>
+`;
+
 
   calculateTopAndLeast(stats);
 }
@@ -132,14 +159,19 @@ shareButton.addEventListener("click", () => {
   }
 
   let message = `سجل الحضور ليوم ${latestRecord.date}:\n\n`;
-  latestRecord.attendance.forEach(({ name, status }) => {
-    message += `${name}: ${status === "حضر" ? "حضور" : "غياب"}\n`;
+  latestRecord.attendance.forEach(({ name, status, details }) => {
+    message += `${name}: ${status === "حضر" ? "حضور" : "غياب"}`;
+    if (details) {
+      message += ` (عذر: ${details})`;
+    }
+    message += "\n";
   });
 
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
   window.open(whatsappUrl, "_blank");
 });
+
 
 const clearHistoryButton = document.getElementById("clear-history-button");
 
@@ -159,4 +191,56 @@ toggleHistoryButton.addEventListener("click", () => {
   historyElement.classList.toggle("hidden");
 });
 
+
+
+
+
+
+let deferredPrompt;
+const installButton = document.getElementById("install-button");
+
+// إظهار الموجه عندما يكون الموقع جاهزًا للتثبيت
+window.addEventListener('beforeinstallprompt', (event) => {
+  // منع الموجه التلقائي من الظهور
+  event.preventDefault();
+  deferredPrompt = event;
+
+  // إظهار زر التثبيت
+  installButton.style.display = 'block';
+
+  // عندما ينقر المستخدم على زر التثبيت
+  installButton.addEventListener('click', () => {
+    // إظهار الموجه
+    deferredPrompt.prompt();
+
+    // انتظر رد المستخدم
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('تم تثبيت التطبيق');
+      } else {
+        console.log('رفض تثبيت التطبيق');
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+
+// حدث عند تثبيت التطبيق بنجاح
+window.addEventListener('appinstalled', (event) => {
+  console.log('تم تثبيت التطبيق');
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+      console.log('Service Worker registered with scope:', registration.scope);
+    }).catch((error) => {
+      console.log('Service Worker registration failed:', error);
+    });
+  });
+}
+
+
 loadHistory();
+
+calculateStats();
